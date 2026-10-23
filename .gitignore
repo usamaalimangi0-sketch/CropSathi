@@ -3,6 +3,7 @@
 .env.local
 .env.*.local
 *.env
+push_to_github.py
 
 # Python
 __pycache__/
