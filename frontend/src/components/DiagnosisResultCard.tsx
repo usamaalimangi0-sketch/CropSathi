@@ -25,6 +25,12 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
   const navigate = useNavigate();
   const isRtl = result.language === 'ur';
 
+  // Helper to remove any rogue markdown asterisks from AI responses
+  const cleanText = (text?: string): string => {
+    if (!text) return '';
+    return text.replace(/\*\*/g, '').replace(/\*/g, '').trim();
+  };
+
   const getStatusBadge = () => {
     switch (result.plant_status) {
       case 'healthy':
@@ -105,7 +111,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
               )}
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              {result.diagnosis.name || 'Diagnosis Complete'}
+              {cleanText(result.diagnosis.name) || 'Diagnosis Complete'}
             </h2>
             <p className="text-agri-100 text-xs sm:text-sm mt-1">
               Analyzed on {result.created_at ? new Date(result.created_at).toLocaleString() : 'Just now'} • Quality: {result.image_quality}
@@ -158,7 +164,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
                 {isRtl ? 'طبی شواہد اور زرعی تجزیہ' : 'Visible Evidence & Pathologist Reasoning'}
               </h3>
               <p className="text-sm text-slate-800 leading-relaxed font-normal">
-                {result.diagnosis.reasoning_summary || 'No diagnostic notes provided.'}
+                {cleanText(result.diagnosis.reasoning_summary) || 'No diagnostic notes provided.'}
               </p>
               {result.diagnosis.confidence !== null && result.diagnosis.confidence !== undefined && (
                 <div className="mt-3 text-xs text-slate-500 font-medium">
@@ -206,7 +212,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
                 {result.symptoms.map((symptom, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
-                    <span className="leading-relaxed">{symptom}</span>
+                    <span className="leading-relaxed">{cleanText(symptom)}</span>
                   </li>
                 ))}
               </ul>
@@ -226,7 +232,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
                 {result.possible_causes.map((cause, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-orange-500 font-bold">•</span>
-                    <span className="leading-relaxed">{cause}</span>
+                    <span className="leading-relaxed">{cleanText(cause)}</span>
                   </li>
                 ))}
               </ul>
@@ -248,7 +254,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
                     <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
-                    <span className="leading-relaxed">{action}</span>
+                    <span className="leading-relaxed">{cleanText(action)}</span>
                   </li>
                 ))}
               </ul>
@@ -268,7 +274,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
                 {result.prevention.map((prev, idx) => (
                   <li key={idx} className="flex items-start gap-2.5">
                     <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
-                    <span className="leading-relaxed">{prev}</span>
+                    <span className="leading-relaxed">{cleanText(prev)}</span>
                   </li>
                 ))}
               </ul>
@@ -283,7 +289,7 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
         <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold">Official Agricultural Advisory Notice:</span> {result.disclaimer}
+            <span className="font-bold">Official Agricultural Advisory Notice:</span> {cleanText(result.disclaimer)}
           </div>
         </div>
 

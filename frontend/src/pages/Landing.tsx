@@ -130,7 +130,7 @@ export const Landing: React.FC = () => {
             {/* Bilingual Subtitle / Value Prop */}
             <div className="space-y-2 max-w-xl mx-auto lg:mx-0">
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-                CropSathi AI combines **Google Gemini Multimodal Vision** with localized agronomic knowledge and live district agro-meteorology. Instant leaf diagnosis and IPM care guides in **English and Urdu (اردو)**.
+                CropSathi AI combines <span className="font-semibold text-slate-800">Google Gemini Multimodal Vision</span> with localized agronomic knowledge and live district agro-meteorology. Instant leaf diagnosis and IPM care guides in <span className="font-semibold text-slate-800">English, Urdu (اردو), and Sindhi (سنڌي)</span>.
               </p>
               <p className="font-urdu text-sm sm:text-base text-agri-800 font-medium">
                 کسان کا اپنا ڈیجیٹل ساتھی — فصلوں کی بیماریوں کی فوری تشخیص اور آسان رہنمائی۔

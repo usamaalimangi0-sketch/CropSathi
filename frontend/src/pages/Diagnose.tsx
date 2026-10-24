@@ -205,7 +205,7 @@ export const Diagnose: React.FC = () => {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                1. Leaf Photograph <span className="text-rose-500">*</span>
+                1. Leaf Photograph <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md normal-case ml-1">Required</span>
               </label>
 
               {/* Quick sample chips */}

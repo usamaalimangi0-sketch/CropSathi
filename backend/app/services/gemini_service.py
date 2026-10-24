@@ -32,7 +32,7 @@ HINDI_TO_URDU_MAP = {
 }
 
 def sanitize_text(text: str) -> str:
-    """Sanitize Urdu/Sindhi text to eliminate Hindi Devanagari script leaks."""
+    """Sanitize Urdu/Sindhi text to eliminate Hindi Devanagari script leaks and unrendered asterisks."""
     if not isinstance(text, str):
         return text
     # 1. Replace known Hindi vocabulary with Urdu equivalent
@@ -40,7 +40,9 @@ def sanitize_text(text: str) -> str:
         text = text.replace(hi, ur)
     # 2. Strip any remaining Devanagari Unicode characters (\u0900-\u097F)
     text = re.sub(r'[\u0900-\u097F]+', '', text)
-    # 3. Clean extra whitespace
+    # 3. Strip markdown asterisks that create unprofessional raw '*' artifacts in UI
+    text = text.replace('**', '').replace('*', '')
+    # 4. Clean extra whitespace
     text = re.sub(r'\s{2,}', ' ', text).strip()
     return text
 
