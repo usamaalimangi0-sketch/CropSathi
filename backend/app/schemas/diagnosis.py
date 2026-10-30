@@ -2,16 +2,16 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 
 class DiagnosisInfo(BaseModel):
-    name: str = Field(..., description="Name of the identified disease or 'Healthy'")
+    name: str = Field(default="Unspecified", description="Name of the identified disease or 'Healthy'")
     confidence: Optional[float] = Field(None, description="Calibrated confidence score between 0.0 and 1.0, or null if uncertain")
-    reasoning_summary: str = Field(..., description="Visible evidence and reasoning behind the assessment")
+    reasoning_summary: str = Field(default="", description="Visible evidence and reasoning behind the assessment")
 
 class CropDiagnosisResponse(BaseModel):
     id: Optional[str] = Field(None, description="Unique scan ID if persisted")
-    crop: str = Field(..., description="Crop type analyzed, e.g. cotton, wheat, rice, tomato")
-    image_quality: str = Field(..., description="Assessment of image quality: good, low, blurry, unclear")
-    plant_status: str = Field(..., description="healthy, possibly_diseased, unclear, or unsupported")
-    diagnosis: DiagnosisInfo
+    crop: str = Field(default="Crop", description="Crop type analyzed, e.g. cotton, wheat, rice, tomato")
+    image_quality: str = Field(default="good", description="Assessment of image quality: good, low, blurry, unclear")
+    plant_status: str = Field(default="possibly_diseased", description="healthy, possibly_diseased, unclear, or unsupported")
+    diagnosis: DiagnosisInfo = Field(default_factory=DiagnosisInfo)
     symptoms: List[str] = Field(default_factory=list, description="Visible leaf or plant symptoms")
     possible_causes: List[str] = Field(default_factory=list, description="Biological, environmental or pest causes")
     recommended_actions: List[str] = Field(default_factory=list, description="Practical, prioritized next steps")

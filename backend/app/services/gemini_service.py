@@ -189,6 +189,21 @@ You must return a single valid JSON object matching this EXACT schema:
             # Sanitize output data to eliminate any stray Hindi/Devanagari characters
             parsed_data = sanitize_data(parsed_data)
 
+            # Defensive normalization: ensure diagnosis sub-dict has required fields even if LLM keyed it differently
+            if isinstance(parsed_data.get("diagnosis"), dict):
+                diag = parsed_data["diagnosis"]
+                if "reasoning_summary" not in diag or not diag["reasoning_summary"]:
+                    diag["reasoning_summary"] = (
+                        diag.get("reasoning")
+                        or diag.get("summary")
+                        or diag.get("evidence")
+                        or diag.get("explanation")
+                        or diag.get("description")
+                        or "Visual symptoms inspected."
+                    )
+            elif not parsed_data.get("diagnosis"):
+                parsed_data["diagnosis"] = {"name": "Healthy", "confidence": None, "reasoning_summary": "No pathogen detected."}
+
             # Validate against Pydantic schema
             diagnosis_obj = CropDiagnosisResponse(**parsed_data)
             return diagnosis_obj
