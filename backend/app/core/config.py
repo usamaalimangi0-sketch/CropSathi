@@ -12,7 +12,7 @@ class Settings:
 
     # Gemini AI
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "").strip()
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.8-flash").strip()
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-flash-lite-latest").strip()
 
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./cropsathi.db").strip()
