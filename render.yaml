@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: cropsathi-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-flash-lite-latest
+      - key: DATABASE_URL
+        value: sqlite:///./cropsathi.db
+      - key: MAX_UPLOAD_SIZE_MB
+        value: "8"
+      - key: HOST
+        value: 0.0.0.0
