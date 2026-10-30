@@ -201,14 +201,20 @@ You must return a single valid JSON object matching this EXACT schema:
             )
         except APIError as ae:
             logger.error(f"Gemini API Error: {ae}")
-            if "RESOURCE_EXHAUSTED" in str(ae) or "429" in str(ae):
+            err_str = str(ae)
+            if "RESOURCE_EXHAUSTED" in err_str or "429" in err_str:
                 raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="AI_RATE_LIMITED: Gemini API rate limit or quota exceeded. Please wait a moment and try again."
                 )
+            if "PERMISSION_DENIED" in err_str or "403" in err_str:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Gemini API Key Permission Denied: The current API key does not have the Gemini API free tier enabled (free tier is not available for this project/account). Please get a free API key from https://aistudio.google.com/app/apikey (choose 'Create API key in new project')."
+                )
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
-                detail=f"AI_SERVICE_UNAVAILABLE: Gemini API error: {str(ae)}"
+                detail=f"AI_SERVICE_UNAVAILABLE: Gemini API error: {err_str}"
             )
         except HTTPException:
             raise
@@ -294,9 +300,15 @@ Output JSON format:
 
         except APIError as ae:
             logger.error(f"Gemini API Error in chat: {ae}")
+            err_str = str(ae)
+            if "PERMISSION_DENIED" in err_str or "403" in err_str:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail="Gemini API Key Permission Denied: Please generate a free API key from https://aistudio.google.com/app/apikey (choose 'Create API key in new project')."
+                )
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
-                detail=f"AI_SERVICE_UNAVAILABLE: {str(ae)}"
+                detail=f"AI_SERVICE_UNAVAILABLE: {err_str}"
             )
         except Exception as e:
             logger.error(f"Chat assistant error: {e}", exc_info=True)

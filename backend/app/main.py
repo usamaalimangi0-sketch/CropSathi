@@ -51,9 +51,21 @@ def read_root():
         "ai_status": "/api/health/ai"
     }
 
-# Safe error handling: prevent internal trace leaking
+# Safe error handling: ensure HTTPExceptions retain their status code and detail message
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
+
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exc: Exception):
+    if isinstance(exc, HTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": exc.detail}
+        )
     logger.error(f"Unhandled error processing {request.method} {request.url.path}: {exc}", exc_info=True)
     return JSONResponse(
         status_code=500,
