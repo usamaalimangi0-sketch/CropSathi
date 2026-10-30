@@ -32,7 +32,7 @@ HINDI_TO_URDU_MAP = {
 }
 
 def sanitize_text(text: str) -> str:
-    """Sanitize Urdu/Sindhi text to eliminate Hindi Devanagari script leaks and unrendered asterisks."""
+    """Sanitize Urdu text to eliminate Hindi Devanagari script leaks and unrendered asterisks."""
     if not isinstance(text, str):
         return text
     # 1. Replace known Hindi vocabulary with Urdu equivalent
@@ -248,7 +248,7 @@ You must return a single valid JSON object matching this EXACT schema:
         language: str = "en"
     ) -> ChatResponse:
         """
-        Conversational agriculture expert answering farmer questions in English, Urdu, or Sindhi.
+        Conversational agriculture expert answering farmer questions in English or Urdu.
         """
         client = self.get_client()
 

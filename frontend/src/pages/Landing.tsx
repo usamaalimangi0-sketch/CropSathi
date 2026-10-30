@@ -112,10 +112,10 @@ export const Landing: React.FC = () => {
           {/* Left Column: Headline, Value Proposition & CTA Cluster */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             
-            {/* Hackathon & Location Pill */}
+            {/* Platform Pill */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-agri-100/80 border border-agri-300/60 text-xs font-semibold text-agri-900 shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-spin-slow" />
-              <span>DITE Hackathon 2026–27 • Hyderabad, Sindh, Pakistan</span>
+              <Sparkles className="w-3.5 h-3.5 text-agri-700 animate-spin-slow" />
+              <span>AI-Powered Agritech Platform • Pakistan</span>
             </div>
 
             {/* Main Title */}
@@ -130,7 +130,7 @@ export const Landing: React.FC = () => {
             {/* Bilingual Subtitle / Value Prop */}
             <div className="space-y-2 max-w-xl mx-auto lg:mx-0">
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal">
-                CropSathi AI combines <span className="font-semibold text-slate-800">Google Gemini Multimodal Vision</span> with localized agronomic knowledge and live district agro-meteorology. Instant leaf diagnosis and IPM care guides in <span className="font-semibold text-slate-800">English, Urdu (اردو), and Sindhi (سنڌي)</span>.
+                CropSathi AI combines <span className="font-semibold text-slate-800">Google Gemini Multimodal Vision</span> with localized agronomic knowledge and live district agro-meteorology. Instant leaf diagnosis and IPM care guides in <span className="font-semibold text-slate-800">English and Urdu (اردو)</span>.
               </p>
               <p className="font-urdu text-sm sm:text-base text-agri-800 font-medium">
                 کسان کا اپنا ڈیجیٹل ساتھی — فصلوں کی بیماریوں کی فوری تشخیص اور آسان رہنمائی۔

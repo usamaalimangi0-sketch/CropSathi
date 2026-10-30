@@ -55,8 +55,8 @@ export const Dashboard: React.FC = () => {
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-12 sm:px-10 sm:py-16 text-center sm:text-left flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="max-w-2xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-agri-800/80 border border-agri-600/50 text-xs font-semibold text-emerald-300">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>DITE Hackathon 2026–27 • Hyderabad, Pakistan</span>
+              <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
+              <span>AI-Powered Agritech Platform • Pakistan</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">

@@ -24,7 +24,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Intelligent Agriculture Assistant for Pakistani Farmers - DITE Hackathon 2026-27",
+    description="Intelligent Agriculture Assistant for Pakistani Farmers",
     lifespan=lifespan
 )
 
@@ -45,7 +45,7 @@ def read_root():
     return {
         "project": settings.PROJECT_NAME,
         "tagline": "Smart Farming. Healthier Crops. Better Decisions.",
-        "hackathon": "DITE Hackathon 2026-27 (Hyderabad, Pakistan)",
+        "region": "Pakistan",
         "docs_url": "/docs",
         "api_health": "/api/health",
         "ai_status": "/api/health/ai"

@@ -20,8 +20,8 @@ export const AboutPage: React.FC = () => {
       {/* Title */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-agri-100 text-agri-800 text-xs font-semibold">
-          <Award className="w-3.5 h-3.5 text-amber-600" />
-          <span>DITE Hackathon 2026–27 • Hyderabad, Pakistan</span>
+          <Sprout className="w-3.5 h-3.5 text-agri-700" />
+          <span>Intelligent Agritech Platform • Pakistan</span>
         </div>
         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
           About CropSathi AI
