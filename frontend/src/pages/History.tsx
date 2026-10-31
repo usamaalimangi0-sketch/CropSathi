@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { ScanListItem, CropDiagnosisResponse } from '../types';
 import { DiagnosisResultCard } from '../components/DiagnosisResultCard';
@@ -15,10 +16,15 @@ import {
   CheckCircle2,
   HelpCircle,
   X,
-  RefreshCw
+  RefreshCw,
+  Lock,
+  Sparkles,
+  ShieldCheck,
+  UserCheck
 } from 'lucide-react';
 
 export const HistoryPage: React.FC = () => {
+  const { user, isAuthenticated, openAuthModal } = useAuth();
   const [scans, setScans] = useState<ScanListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,6 +34,11 @@ export const HistoryPage: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchScans = async () => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      setScans([]);
+      return;
+    }
     setLoading(true);
     try {
       const data = await api.getScans({
@@ -48,7 +59,7 @@ export const HistoryPage: React.FC = () => {
       fetchScans();
     }, 300);
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm, statusFilter]);
+  }, [searchTerm, statusFilter, isAuthenticated]);
 
   const handleViewDetail = async (id: string) => {
     setLoadingDetail(true);
@@ -80,6 +91,53 @@ export const HistoryPage: React.FC = () => {
     }
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-3xl mx-auto py-12 px-4 text-center space-y-6">
+        <div className="w-16 h-16 rounded-3xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto shadow-sm">
+          <Lock className="w-8 h-8" />
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Personal Farm Scan History Locked
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+            Sign in or create a free farmer account to securely store and review your crop disease diagnoses, treatments, and recovery records over time.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-xl mx-auto text-left pt-2">
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <Sparkles className="w-4 h-4 text-emerald-600 mb-1.5" />
+            <div className="text-xs font-bold text-slate-800">Permanent Records</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Every photo and diagnosis saved under your account.</div>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <ShieldCheck className="w-4 h-4 text-agri-600 mb-1.5" />
+            <div className="text-xs font-bold text-slate-800">Private & Secure</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Only you can view and manage your farm history.</div>
+          </div>
+          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <Search className="w-4 h-4 text-sky-600 mb-1.5" />
+            <div className="text-xs font-bold text-slate-800">Instant Search</div>
+            <div className="text-[11px] text-slate-500 mt-0.5">Filter past scans by crop type, disease, or date.</div>
+          </div>
+        </div>
+
+        <div className="pt-2">
+          <button
+            onClick={() => openAuthModal('Sign in to view and save your personal crop scans.')}
+            className="inline-flex items-center gap-2 bg-agri-800 hover:bg-agri-900 text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-xl shadow-md transition"
+          >
+            <UserCheck className="w-4 h-4 text-emerald-400" />
+            <span>Sign In / Create Free Account (لاگ ان کریں)</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-16">
       
@@ -88,14 +146,14 @@ export const HistoryPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2.5">
             <HistoryIcon className="w-7 h-7 text-agri-700" />
-            Saved Scan History
+            {user ? `${user.full_name}'s Farm Scan History` : 'Saved Scan History'}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Browse and review your real locally-stored crop diagnosis records.
+            Browse and review your real personal crop diagnosis records saved for {user?.district || 'Pakistan'}.
           </p>
         </div>
         <Link
-          to="/diagnose"
+          to="/app?tab=diagnose"
           className="inline-flex items-center gap-2 bg-agri-700 hover:bg-agri-800 text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-xl transition shadow-xs self-start sm:self-center"
         >
           <Camera className="w-4 h-4" />

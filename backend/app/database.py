@@ -26,8 +26,22 @@ def get_db():
 def init_db():
     logger.info("Initializing database tables...")
     # Import all models before create_all
+    import app.models.user  # noqa: F401
     import app.models.scan  # noqa: F401
     Base.metadata.create_all(bind=engine)
+
+    # Safe auto-migration for SQLite to add new columns if table already existed
+    try:
+        from sqlalchemy import text
+        with engine.begin() as conn:
+            result = conn.execute(text("PRAGMA table_info(scans)")).fetchall()
+            col_names = [row[1] for row in result]
+            if col_names and "user_id" not in col_names:
+                conn.execute(text("ALTER TABLE scans ADD COLUMN user_id VARCHAR(36)"))
+                logger.info("Auto-migrated scans table: added user_id column.")
+    except Exception as e:
+        logger.warning(f"SQLite migration check notice: {e}")
+
     logger.info("Database tables initialized successfully.")
 
 # Ensure tables are created upon initialization

@@ -3,6 +3,8 @@ from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, s
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.scan import ScanRecord
+from app.models.user import User
+from app.core.security import get_current_user_optional
 from app.schemas.diagnosis import CropDiagnosisResponse
 from app.services.image_service import validate_and_process_image
 from app.services.gemini_service import gemini_service
@@ -16,6 +18,7 @@ async def diagnose_crop_image(
     crop: Optional[str] = Form(None, description="Optional user-selected crop (e.g. Cotton, Wheat, Rice)"),
     symptoms: Optional[str] = Form(None, description="Optional observed symptoms"),
     language: str = Form("en", description="Preferred response language: en, ur, or sd"),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db)
 ):
     """
@@ -50,6 +53,7 @@ async def diagnose_crop_image(
     # 3. Persist to database
     try:
         scan_record = ScanRecord(
+            user_id=current_user.id if current_user else None,
             crop_type=diagnosis_result.crop or (crop or "Unknown"),
             plant_status=diagnosis_result.plant_status,
             diagnosis_name=diagnosis_result.diagnosis.name if diagnosis_result.diagnosis else "Unspecified",

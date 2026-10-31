@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from app.database import get_db
 from app.models.scan import ScanRecord
+from app.models.user import User
+from app.core.security import get_current_user_optional
 from app.schemas.diagnosis import ScanListResponse, ScanListItem, CropDiagnosisResponse, DiagnosisInfo
 
 router = APIRouter(prefix="/scans", tags=["Scan History"])
@@ -15,10 +17,17 @@ def list_scans(
     plant_status: Optional[str] = Query(None, description="Filter by status: healthy, possibly_diseased, unclear"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     db: Session = Depends(get_db)
 ):
     """Retrieve saved scans with optional search and filters."""
     query = db.query(ScanRecord)
+
+    # Filter scans to the current user if logged in; if guest, show guest records or demo scans
+    if current_user:
+        query = query.filter(ScanRecord.user_id == current_user.id)
+    else:
+        query = query.filter(ScanRecord.user_id.is_(None))
 
     if crop:
         query = query.filter(ScanRecord.crop_type.ilike(f"%{crop}%"))

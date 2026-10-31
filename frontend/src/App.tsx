@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { AuthModal } from './components/AuthModal';
 import { Navbar } from './layouts/Navbar';
 import { Footer } from './layouts/Footer';
 import { AiStatusBanner } from './components/AiStatusBanner';
@@ -18,35 +20,38 @@ const RedirectToWorkspaceTab: React.FC<{ tab: string }> = ({ tab }) => {
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div className="flex flex-col min-h-screen bg-[#f8faf8] text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-950">
-        <Navbar />
-        <AiStatusBanner />
-        
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-          <Routes>
-            {/* Page 1: Professional Landing Page */}
-            <Route path="/" element={<Landing />} />
+      <AuthProvider>
+        <div className="flex flex-col min-h-screen bg-[#f8faf8] text-slate-800 antialiased selection:bg-emerald-200 selection:text-emerald-950">
+          <Navbar />
+          <AiStatusBanner />
+          <AuthModal />
+          
+          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+            <Routes>
+              {/* Page 1: Professional Landing Page */}
+              <Route path="/" element={<Landing />} />
 
-            {/* Page 2: Main Working Studio Workspace */}
-            <Route path="/app" element={<Workspace />} />
+              {/* Page 2: Main Working Studio Workspace */}
+              <Route path="/app" element={<Workspace />} />
 
-            {/* Backward-Compatible Route Aliases directly mapping to Workspace Tabs */}
-            <Route path="/diagnose" element={<RedirectToWorkspaceTab tab="diagnose" />} />
-            <Route path="/assistant" element={<RedirectToWorkspaceTab tab="assistant" />} />
-            <Route path="/irrigation" element={<RedirectToWorkspaceTab tab="irrigation" />} />
-            <Route path="/history" element={<RedirectToWorkspaceTab tab="history" />} />
-            <Route path="/dashboard" element={<Navigate to="/" replace />} />
+              {/* Backward-Compatible Route Aliases directly mapping to Workspace Tabs */}
+              <Route path="/diagnose" element={<RedirectToWorkspaceTab tab="diagnose" />} />
+              <Route path="/assistant" element={<RedirectToWorkspaceTab tab="assistant" />} />
+              <Route path="/irrigation" element={<RedirectToWorkspaceTab tab="irrigation" />} />
+              <Route path="/history" element={<RedirectToWorkspaceTab tab="history" />} />
+              <Route path="/dashboard" element={<Navigate to="/" replace />} />
 
-            {/* Additional info */}
-            <Route path="/about" element={<AboutPage />} />
+              {/* Additional info */}
+              <Route path="/about" element={<AboutPage />} />
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
 
-        <Footer />
-      </div>
+          <Footer />
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

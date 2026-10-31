@@ -101,3 +101,29 @@ export interface AiHealth {
   status: 'ready' | 'configuration_required';
   instructions: string;
 }
+
+export interface UserProfile {
+  id: string;
+  phone_or_email: string;
+  full_name: string;
+  district: string;
+  created_at?: string;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  user: UserProfile;
+}
+
+export interface LoginPayload {
+  phone_or_email: string;
+  password: string;
+}
+
+export interface RegisterPayload {
+  phone_or_email: string;
+  full_name: string;
+  password: string;
+  district?: string;
+}

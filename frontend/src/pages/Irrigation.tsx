@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { IrrigationResponse } from '../types';
 import {
@@ -55,6 +56,7 @@ const SOIL_TYPES = [
 ];
 
 export const IrrigationPage: React.FC = () => {
+  const { requireAuth, isAuthenticated } = useAuth();
   const [location, setLocation] = useState(PAKISTAN_LOCATIONS[0].name);
   const [crop, setCrop] = useState(CROPS[0]);
   const [growthStage, setGrowthStage] = useState(GROWTH_STAGES[1]);
@@ -64,7 +66,7 @@ export const IrrigationPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAdvice = async () => {
+  const executeFetchAdvice = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -85,9 +87,18 @@ export const IrrigationPage: React.FC = () => {
     }
   };
 
+  const handleCalculateAdvice = () => {
+    requireAuth(
+      () => executeFetchAdvice(),
+      'Sign in to calculate live weather telemetry and tailored irrigation advisories for your farm.'
+    );
+  };
+
   useEffect(() => {
-    fetchAdvice();
-  }, [location, crop, growthStage, soilType]);
+    if (isAuthenticated) {
+      executeFetchAdvice();
+    }
+  }, [location, crop, growthStage, soilType, isAuthenticated]);
 
   const getUrgencyBadge = (urg: string) => {
     switch (urg) {
@@ -207,6 +218,21 @@ export const IrrigationPage: React.FC = () => {
             </select>
           </div>
 
+        </div>
+
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+          <p className="text-xs text-slate-500 font-medium">
+            Fetches live temperature, humidity, precipitation and soil moisture from Open-Meteo.
+          </p>
+          <button
+            type="button"
+            onClick={handleCalculateAdvice}
+            disabled={loading}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-agri-800 hover:bg-agri-900 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-xs transition"
+          >
+            <CloudRain className="w-4 h-4 text-emerald-400" />
+            <span>{loading ? 'Computing...' : 'Calculate Irrigation Advisory'}</span>
+          </button>
         </div>
       </div>
 

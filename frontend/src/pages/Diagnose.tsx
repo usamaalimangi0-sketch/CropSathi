@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { CropDiagnosisResponse } from '../types';
 import { DiagnosisResultCard } from '../components/DiagnosisResultCard';
@@ -63,6 +64,7 @@ const QUICK_SAMPLES = [
 ];
 
 export const Diagnose: React.FC = () => {
+  const { requireAuth } = useAuth();
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedCrop, setSelectedCrop] = useState<string>('Cotton');
@@ -130,13 +132,8 @@ export const Diagnose: React.FC = () => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!file) {
-      setError('Please select or capture a crop leaf photograph first.');
-      return;
-    }
-
+  const executeDiagnosis = async () => {
+    if (!file) return;
     setLoading(true);
     setError(null);
     setResult(null);
@@ -168,6 +165,18 @@ export const Diagnose: React.FC = () => {
       clearTimeout(timer3);
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!file) {
+      setError('Please select or capture a crop leaf photograph first.');
+      return;
+    }
+    requireAuth(
+      () => executeDiagnosis(),
+      'Sign in or create a free farmer account to analyze your crop leaf and save it to your records.'
+    );
   };
 
   return (

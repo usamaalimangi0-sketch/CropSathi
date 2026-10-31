@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { ChatMessage } from '../types';
 import {
@@ -26,6 +27,7 @@ const SUGGESTED_QUESTIONS = [
 ];
 
 export const Assistant: React.FC = () => {
+  const { requireAuth } = useAuth();
   const location = useLocation();
   const state = location.state as { initialQuery?: string; cropContext?: string } | null;
 
@@ -60,7 +62,7 @@ export const Assistant: React.FC = () => {
     }
   }, []);
 
-  const handleSendMessage = async (queryText?: string) => {
+  const executeSendMessage = async (queryText?: string) => {
     const textToSend = queryText || input;
     if (!textToSend.trim() || loading) return;
 
@@ -90,6 +92,16 @@ export const Assistant: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSendMessage = (queryText?: string) => {
+    const textToSend = queryText || input;
+    if (!textToSend.trim()) return;
+
+    requireAuth(
+      () => executeSendMessage(queryText),
+      'Sign in or create an account to consult with the AI Farming Assistant in Urdu or English.'
+    );
   };
 
   // Format message to render bold text properly and eliminate stray asterisks

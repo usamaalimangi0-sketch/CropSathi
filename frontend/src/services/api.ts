@@ -7,7 +7,11 @@ import {
   IrrigationRequest,
   IrrigationResponse,
   SystemHealth,
-  AiHealth
+  AiHealth,
+  UserProfile,
+  AuthResponse,
+  LoginPayload,
+  RegisterPayload
 } from '../types';
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || '/api';
@@ -20,7 +24,32 @@ const apiClient = axios.create({
   }
 });
 
+// Automatic Bearer Token Interceptor
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('cropsathi_token');
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const api = {
+  // Authentication & Profile
+  async register(payload: RegisterPayload): Promise<AuthResponse> {
+    const res = await apiClient.post<AuthResponse>('/auth/register', payload);
+    return res.data;
+  },
+
+  async login(payload: LoginPayload): Promise<AuthResponse> {
+    const res = await apiClient.post<AuthResponse>('/auth/login', payload);
+    return res.data;
+  },
+
+  async getMe(): Promise<UserProfile> {
+    const res = await apiClient.get<UserProfile>('/auth/me');
+    return res.data;
+  },
+
   // System Health
   async getHealth(): Promise<SystemHealth> {
     const res = await apiClient.get<SystemHealth>('/health');
