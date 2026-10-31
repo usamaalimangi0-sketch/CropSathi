@@ -1,0 +1,63 @@
+{
+  "name": "CropSathi AI - Smart Farming Pakistan",
+  "short_name": "CropSathi",
+  "description": "AI-Powered Multimodal Crop Disease Detection & Smart Irrigation Advisor for Pakistani Farmers",
+  "start_url": "/app?tab=diagnose",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#064e3b",
+  "theme_color": "#064e3b",
+  "lang": "en-PK",
+  "categories": ["agriculture", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI Leaf Doctor",
+      "short_name": "Diagnose",
+      "description": "Scan and diagnose crop leaf diseases",
+      "url": "/app?tab=diagnose",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Smart Irrigation",
+      "short_name": "Irrigation",
+      "description": "Calculate weather-aware irrigation advice",
+      "url": "/app?tab=irrigation",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Farming Assistant",
+      "short_name": "Assistant",
+      "description": "Chat with AI Agronomist in Urdu or English",
+      "url": "/app?tab=assistant",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Scan History",
+      "short_name": "History",
+      "description": "Review your past farm diagnosis records",
+      "url": "/app?tab=history",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

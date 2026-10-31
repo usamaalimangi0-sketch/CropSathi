@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CropSathi AI</string>
+    <string name="title_activity_main">CropSathi AI</string>
+    <string name="package_name">pk.cropsathi.app</string>
+    <string name="custom_url_scheme">pk.cropsathi.app</string>
+</resources>

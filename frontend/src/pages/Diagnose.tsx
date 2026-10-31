@@ -77,6 +77,7 @@ export const Diagnose: React.FC = () => {
   const [result, setResult] = useState<CropDiagnosisResponse | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (selectedFile: File) => {
     setError(null);
@@ -247,17 +248,40 @@ export const Diagnose: React.FC = () => {
                   className="hidden"
                   onChange={(e) => e.target.files?.[0] && handleFileChange(e.target.files[0])}
                 />
+                <input
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
+                  onChange={(e) => e.target.files?.[0] && handleFileChange(e.target.files[0])}
+                />
 
                 <div className="w-16 h-16 rounded-2xl bg-white shadow-xs border border-slate-200 text-agri-600 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition duration-300">
                   <UploadCloud className="w-8 h-8" />
                 </div>
 
                 <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-1">
-                  Click to capture or drag & drop leaf photo
+                  Click to choose leaf photo or drop here
                 </h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                <p className="text-xs text-slate-500 max-w-sm mx-auto mb-3">
                   Accepted formats: JPEG, PNG, or WebP. Max size: 8 MB.
                 </p>
+
+                {/* Direct Mobile Camera Button */}
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      cameraInputRef.current?.click();
+                    }}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition"
+                  >
+                    <Camera className="w-4 h-4 text-emerald-200" />
+                    <span>Take Field Photo (کیمرہ کھولیں)</span>
+                  </button>
+                </div>
 
                 {/* Mobile Sample Chips */}
                 <div className="mt-4 flex sm:hidden flex-wrap items-center justify-center gap-2">
