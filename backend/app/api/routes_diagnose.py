@@ -36,6 +36,16 @@ async def diagnose_crop_image(
             detail="Failed to read uploaded file."
         )
 
+    # 0. Freemium Quota Enforcement
+    if current_user and not current_user.is_pro():
+        used = current_user.scans_used_this_month or 0
+        limit = current_user.monthly_scan_limit or 3
+        if used >= limit:
+            raise HTTPException(
+                status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                detail="You have reached your 3 free crop scans for this month. Please upgrade to Kisan Pro (PKR 499/mo) for unlimited scans!"
+            )
+
     # 1. Image validation & resizing
     processed_bytes, mime_type, thumb_b64 = validate_and_process_image(
         file_bytes, filename=file.filename or "upload.jpg"
@@ -68,6 +78,11 @@ async def diagnose_crop_image(
             image_data=thumb_b64
         )
         db.add(scan_record)
+        
+        # Increment quota count for user
+        if current_user:
+            current_user.scans_used_this_month = (current_user.scans_used_this_month or 0) + 1
+        
         db.commit()
         db.refresh(scan_record)
 

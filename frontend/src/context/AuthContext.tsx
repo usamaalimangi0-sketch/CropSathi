@@ -10,10 +10,14 @@ interface AuthContextType {
   login: (credentials: LoginPayload) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => void;
+  updateUserProfile: (updated: UserProfile) => void;
   isAuthModalOpen: boolean;
   authModalReason: string;
   openAuthModal: (reason?: string, onSuccessAction?: () => void) => void;
   closeAuthModal: () => void;
+  isPricingModalOpen: boolean;
+  openPricingModal: () => void;
+  closePricingModal: () => void;
   requireAuth: (action: () => void, reason?: string) => void;
 }
 
@@ -29,6 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState(false);
   const [authModalReason, setAuthModalReason] = useState('Please sign in or create an account to use this feature.');
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
@@ -102,6 +107,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setPendingAction(null);
   };
 
+  const openPricingModal = () => setIsPricingModalOpen(true);
+  const closePricingModal = () => setIsPricingModalOpen(false);
+
+  const updateUserProfile = (updated: UserProfile) => {
+    setUser(updated);
+    localStorage.setItem('cropsathi_user', JSON.stringify(updated));
+  };
+
   const requireAuth = (action: () => void, reason?: string) => {
     if (token && user) {
       action();
@@ -120,10 +133,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         login,
         register,
         logout,
+        updateUserProfile,
         isAuthModalOpen,
         authModalReason,
         openAuthModal,
         closeAuthModal,
+        isPricingModalOpen,
+        openPricingModal,
+        closePricingModal,
         requireAuth
       }}
     >

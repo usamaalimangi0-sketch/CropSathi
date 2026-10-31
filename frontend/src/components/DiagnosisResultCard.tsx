@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CropDiagnosisResponse } from '../types';
+import { DosageCalculatorCard } from './DosageCalculatorCard';
 import {
   CheckCircle2,
   AlertCircle,
@@ -284,6 +285,16 @@ export const DiagnosisResultCard: React.FC<Props> = ({ result, onReset }) => {
           </div>
 
         </div>
+
+        {/* Precision Spray & Fertilizer Dosage Calculator (Monetization & B2B Dealers) */}
+        {result.plant_status !== 'unsupported' && (
+          <div className="pt-2">
+            <DosageCalculatorCard
+              crop={result.crop}
+              diseaseName={result.diagnosis?.name || 'Crop Health'}
+            />
+          </div>
+        )}
 
         {/* Agricultural Disclaimer */}
         <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-3">

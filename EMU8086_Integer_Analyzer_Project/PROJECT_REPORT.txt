@@ -1,0 +1,93 @@
+================================================================================
+                    UNIVERSITY MINI-PROJECT REPORT
+================================================================================
+Project Title  : 8086 Integer Sign & Parity Analyzer
+Course Name    : Computer Organization & Assembly Language (COAL / CAAL)
+Level          : 3rd Semester, Department of Computer Science & Engineering
+Environment    : EMU8086 Microprocessor Emulator
+Author / Group : [Insert Student Name(s) and Roll Numbers here]
+================================================================================
+
+1. ABSTRACT
+-----------
+This project presents an interactive assembly language application developed for 
+the Intel 8086 microprocessor using the EMU8086 emulator. The application takes 
+a signed or unsigned multi-digit integer from the user via keyboard input, evaluates 
+its mathematical properties, and outputs whether the number is POSITIVE, NEGATIVE, 
+or ZERO, as well as whether it is EVEN or ODD. The project incorporates real-time 
+ASCII-to-integer conversion, bitwise manipulation, flag status inspection, 
+and DOS interrupt services.
+
+2. OBJECTIVES
+-------------
+- To understand low-level I/O operations using DOS Interrupt 21H.
+- To implement ASCII to integer string conversion logic in assembly.
+- To inspect and utilize CPU Status Flags (Zero Flag - ZF).
+- To practice register manipulation (AX, BX, CX, DX, DS) and stack operations.
+- To construct loop control and error handling mechanisms at the assembly level.
+
+3. SYSTEM ARCHITECTURE & REGISTERS USED
+---------------------------------------
+- Memory Model: SMALL (Code <= 64KB, Data <= 64KB).
+- AX (Accumulator): Used for arithmetic operations, multiplication by 10, parity testing.
+- BX (Base Register): Used to hold temporary digits and multiplier values.
+- DX (Data Register): Holds string addresses (pointers) for INT 21H / Function 09H.
+- DS (Data Segment): Initialized to point to @DATA.
+- Flags Tested: Zero Flag (ZF) via TEST instruction.
+
+4. ALGORITHM / FLOWCHART DESCRIPTION
+------------------------------------
+Step 1: Initialize DS = @DATA.
+Step 2: Print Welcome Banner and Input Prompt.
+Step 3: Reset variables (NUM = 0, IS_NEG = 0, HAS_DIGIT = 0).
+Step 4: Read first character:
+        - If '-', set IS_NEG = 1, continue.
+        - If '+', continue.
+        - If digit ('0'-'9'), NUM = char - '0'.
+        - Else, report error.
+Step 5: Read subsequent characters until Enter (0DH):
+        - Multiply NUM by 10.
+        - Add new digit (char - '0').
+Step 6: Determine Sign:
+        - If NUM == 0 -> Output "ZERO".
+        - Else if IS_NEG == 1 -> Output "NEGATIVE".
+        - Else -> Output "POSITIVE".
+Step 7: Determine Parity:
+        - Perform 'TEST NUM, 1'.
+        - If Zero Flag is set (ZF=1) -> Output "EVEN".
+        - Else (ZF=0) -> Output "ODD".
+Step 8: Prompt user to run again (Y/N). If 'Y', repeat from Step 3. Otherwise, exit.
+
+5. TEST CASES & EXPERIMENTAL RESULTS
+------------------------------------
+Test Case 1:
+  Input   : 42
+  Output  : Sign = POSITIVE (+), Parity = EVEN
+  Status  : PASSED
+
+Test Case 2:
+  Input   : -17
+  Output  : Sign = NEGATIVE (-), Parity = ODD
+  Status  : PASSED
+
+Test Case 3:
+  Input   : 0
+  Output  : Sign = ZERO (Neither Positive nor Negative), Parity = EVEN
+  Status  : PASSED
+
+Test Case 4:
+  Input   : -8
+  Output  : Sign = NEGATIVE (-), Parity = EVEN
+  Status  : PASSED
+
+Test Case 5:
+  Input   : +105
+  Output  : Sign = POSITIVE (+), Parity = ODD
+  Status  : PASSED
+
+6. CONCLUSION
+-------------
+The project successfully meets all academic requirements for a 3rd-semester 
+assembly language project. It demonstrates fundamental computer engineering 
+principles including processor registers, bitwise logic, and interrupt handling.
+================================================================================

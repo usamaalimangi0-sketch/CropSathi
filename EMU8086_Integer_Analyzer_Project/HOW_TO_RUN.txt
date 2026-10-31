@@ -1,0 +1,36 @@
+========================================================================
+HOW TO RUN THIS PROJECT IN EMU8086 (QUICK START GUIDE)
+========================================================================
+
+STEP 1: OPEN EMU8086
+--------------------
+- Double-click and open the EMU8086 software on your computer.
+
+STEP 2: LOAD OR PASTE THE CODE
+------------------------------
+Option A (Direct Open):
+- In EMU8086, click "Open".
+- Browse to this folder and select "EVEN_ODD_SIGN_CHECKER.asm".
+
+Option B (Copy & Paste):
+- Open "EVEN_ODD_SIGN_CHECKER.asm" with Notepad.
+- Press Ctrl + A, then Ctrl + C to copy all the code.
+- In EMU8086, click "New", select "empty workspace", and press Ctrl + V to paste.
+
+STEP 3: EMULATE
+---------------
+- Click the green "Emulate" button on the top toolbar (or press F5 on your keyboard).
+- EMU8086 will assemble the program and open the "emulator" screen.
+
+STEP 4: RUN
+-----------
+- On the emulator window, click the "Run" button (or press F9).
+- A black MS-DOS console window will open.
+
+STEP 5: INTERACT WITH THE PROGRAM
+---------------------------------
+- Type an integer (e.g., 24, -15, 0, 99) and press ENTER.
+- The program will display:
+    * Whether the integer is POSITIVE, NEGATIVE, or ZERO
+    * Whether the integer is EVEN or ODD
+- Type 'Y' to test another number or 'N' to exit.

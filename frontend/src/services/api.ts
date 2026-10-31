@@ -114,5 +114,44 @@ export const api = {
   async getIrrigationAdvice(payload: IrrigationRequest): Promise<IrrigationResponse> {
     const res = await apiClient.post<IrrigationResponse>('/irrigation/advice', payload);
     return res.data;
+  },
+
+  // Monetization Pillar A: Subscription & Payments
+  async getPlans(): Promise<any[]> {
+    const res = await apiClient.get('/payments/plans');
+    return res.data;
+  },
+
+  async subscribePlan(payload: any): Promise<any> {
+    const res = await apiClient.post('/payments/subscribe', payload);
+    return res.data;
+  },
+
+  // Monetization Pillar B: Chemical Dosage Calculator & Dealer Leads
+  async calculateDosage(payload: any): Promise<any> {
+    const res = await apiClient.post('/dosage/calculate', payload);
+    return res.data;
+  },
+
+  async getDealers(district?: string): Promise<any[]> {
+    const res = await apiClient.get('/dosage/dealers', { params: { district } });
+    return res.data;
+  },
+
+  async connectDealer(payload: any): Promise<any> {
+    const res = await apiClient.post('/dosage/leads', payload);
+    return res.data;
+  },
+
+  // Monetization Pillar C: WhatsApp Bot Gateway
+  async getWhatsAppBotInfo(): Promise<any> {
+    const res = await apiClient.get('/whatsapp/bot-info');
+    return res.data;
+  },
+
+  // Monetization Pillar D: Agri-Lending & Insurance Risk Certificate
+  async assessEnterpriseRisk(payload: any): Promise<any> {
+    const res = await apiClient.post('/enterprise/crop-health-assessment', payload);
+    return res.data;
   }
 };

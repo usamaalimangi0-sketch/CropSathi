@@ -1,0 +1,60 @@
+========================================================================
+VIVA VOCE & LAB DEFENSE QUESTIONS (WITH ANSWERS)
+Course: Computer Organization & Assembly Language (COAL / CAAL)
+Project: 8086 Integer Parity and Sign Analyzer
+========================================================================
+
+Q1: Why do we write 'MOV AX, @DATA' followed by 'MOV DS, AX'?
+Ans: 
+In the 8086 architecture, the Data Segment register (DS) points to the 
+segment of memory where variables are stored. 8086 hardware architecture 
+does not permit moving an immediate value directly into a segment register. 
+Therefore, we must first load the segment address into the general-purpose 
+accumulator register AX and then transfer it into DS.
+
+Q2: Why do all string variables end with the '$' symbol?
+Ans: 
+We display strings using DOS Interrupt 21H with Function AH = 09H. 
+DOS was designed so that Function 09H expects a '$' (ASCII 24H) as the 
+sentinel/termination character to know where the string ends in memory.
+
+Q3: How does the program check whether a number is Even or Odd?
+Ans: 
+We use the instruction 'TEST AX, 1'. 
+In binary representation, the least significant bit (bit 0) determines 
+parity:
+- Even numbers always end with 0 in bit 0 (e.g., 4 is 0100b).
+- Odd numbers always end with 1 in bit 0 (e.g., 5 is 0101b).
+'TEST AX, 1' performs a bitwise AND between AX and 0001H:
+- If bit 0 is 0: Result is 0, so the CPU sets Zero Flag (ZF = 1).
+- If bit 0 is 1: Result is 1, so the CPU clears Zero Flag (ZF = 0).
+The instruction 'JNZ PRINT_ODD' jumps to odd if ZF = 0; otherwise, 
+it proceeds to even.
+
+Q4: Why use 'TEST AX, 1' instead of division ('DIV 2')?
+Ans: 
+1. Efficiency: 'TEST' executes in only 1-2 clock cycles, whereas division 
+   ('DIV' or 'IDIV') is very slow and takes roughly 20-30 clock cycles.
+2. Register Preservation: 'DIV' alters AX and DX (quotient and remainder), 
+   while 'TEST' is non-destructive and only updates CPU status flags.
+
+Q5: How does the program convert keyboard input into a decimal number?
+Ans: 
+Keyboard input is read character-by-character as ASCII characters using 
+INT 21H, AH = 01H.
+To convert an ASCII character (e.g., '5', which is 35H) to its numeric 
+value, we subtract '0' (30H): 35H - 30H = 5.
+For multiple digits, we accumulate using the formula:
+    NUM = (NUM * 10) + new_digit.
+
+Q6: How does the program detect negative numbers?
+Ans: 
+When the user types the first character, the program compares it to '-':
+If it matches '-', a flag 'IS_NEG' is set to 1.
+When evaluating the number, if 'IS_NEG' is 1, it reports NEGATIVE; 
+otherwise, if NUM != 0, it reports POSITIVE.
+
+Q7: What does DOS Interrupt 21H with Function 4CH do?
+Ans: 
+Function AH = 4CH is the standard DOS system call to safely terminate 
+a program and return control back to the operating system / emulator.

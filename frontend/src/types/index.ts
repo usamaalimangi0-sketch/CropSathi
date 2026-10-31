@@ -107,7 +107,114 @@ export interface UserProfile {
   phone_or_email: string;
   full_name: string;
   district: string;
+  subscription_tier?: 'free' | 'pro_monthly' | 'kisan_season_pass';
+  is_pro?: boolean;
+  scans_used?: number;
+  monthly_limit?: number;
+  scans_remaining?: number | string;
+  subscription_expires_at?: string;
   created_at?: string;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  urdu_name: string;
+  price_pkr: number;
+  duration: string;
+  scans_limit: string;
+  features: string[];
+  badge?: string;
+}
+
+export interface SubscribePaymentRequest {
+  plan_id: string;
+  payment_gateway: string;
+  account_number?: string;
+}
+
+export interface SubscribePaymentResponse {
+  success: boolean;
+  message: string;
+  transaction_id: string;
+  plan_id: string;
+  amount_pkr: number;
+  subscription_expires_at?: string;
+  user_summary: UserProfile;
+}
+
+export interface DosageCalculatorRequest {
+  crop: string;
+  disease_or_problem: string;
+  land_size: number;
+  land_unit?: string;
+}
+
+export interface DosageCalculatorResponse {
+  crop: string;
+  problem: string;
+  land_size_acres: number;
+  chemical_active: string;
+  product_trade_name: string;
+  recommended_partner: string;
+  required_quantity_liters: number;
+  water_volume_liters: number;
+  sprayer_tanks_20l: number;
+  estimated_spray_cost_pkr: number;
+  instructions: string[];
+}
+
+export interface DealerInfo {
+  id: string;
+  name: string;
+  partner_brand: string;
+  district: string;
+  address: string;
+  phone: string;
+  whatsapp: string;
+  verified: boolean;
+  specialties: string[];
+  rating: number;
+}
+
+export interface LeadConnectRequest {
+  dealer_id: string;
+  crop: string;
+  disease_name: string;
+  chemical_prescribed?: string;
+}
+
+export interface LeadConnectResponse {
+  success: boolean;
+  lead_id: string;
+  dealer_name: string;
+  whatsapp_url: string;
+  phone: string;
+  message: string;
+}
+
+export interface EnterpriseAssessmentRequest {
+  farmer_name: string;
+  farmer_phone: string;
+  district: string;
+  crop: string;
+  field_size_acres: number;
+  observed_disease?: string;
+  severity?: string;
+  loan_requested_pkr?: number;
+}
+
+export interface EnterpriseAssessmentResponse {
+  certificate_id: string;
+  farmer_name: string;
+  district: string;
+  crop: string;
+  field_risk_index_pct: number;
+  crop_health_grade: string;
+  loan_eligibility_recommendation: string;
+  loss_probability_pct: number;
+  verification_hash: string;
+  timestamp: string;
 }
 
 export interface AuthResponse {

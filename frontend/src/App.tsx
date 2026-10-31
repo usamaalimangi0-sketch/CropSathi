@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { AuthModal } from './components/AuthModal';
+import { PricingModal } from './components/PricingModal';
 import { InstallPwaBanner } from './components/InstallPwaBanner';
 import { Navbar } from './layouts/Navbar';
 import { Footer } from './layouts/Footer';
@@ -26,6 +27,7 @@ export const App: React.FC = () => {
           <Navbar />
           <AiStatusBanner />
           <AuthModal />
+          <PricingModal />
           <InstallPwaBanner />
           
           <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">

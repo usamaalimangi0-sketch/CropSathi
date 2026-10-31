@@ -15,13 +15,15 @@ import {
   LayoutGrid,
   User,
   LogOut,
-  LogIn
+  LogIn,
+  Crown,
+  MessageCircle
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { user, isAuthenticated, logout, openAuthModal } = useAuth();
+  const { user, isAuthenticated, logout, openAuthModal, openPricingModal } = useAuth();
   const isAppWorkspace = location.pathname.startsWith('/app');
 
   const navLinks = [
@@ -104,8 +106,36 @@ export const Navbar: React.FC = () => {
 
           {/* Right Action CTA Button & Auth Controls */}
           <div className="hidden sm:flex items-center gap-3">
+            {/* WhatsApp Quick Bot Link */}
+            <a
+              href="https://wa.me/923001234567?text=Assalam-o-Alaikum%20CropSathi!%20I%20want%20to%20diagnose%20my%20crop."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 text-xs font-bold transition"
+              title="Official WhatsApp Bot"
+            >
+              <MessageCircle className="w-4 h-4 text-emerald-600" />
+              <span className="hidden lg:inline">WhatsApp Bot</span>
+            </a>
+
             {isAuthenticated && user ? (
               <div className="flex items-center gap-2">
+                {/* Pro Tier Status / Upgrade Button */}
+                {user.is_pro ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-black">
+                    <Crown className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Kisan Pro</span>
+                  </span>
+                ) : (
+                  <button
+                    onClick={openPricingModal}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-black text-xs shadow-xs transition"
+                  >
+                    <Crown className="w-3.5 h-3.5" />
+                    <span>Upgrade Pro</span>
+                  </button>
+                )}
+
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200/80 text-xs font-semibold text-slate-800">
                   <div className="w-5 h-5 rounded-full bg-agri-700 text-white flex items-center justify-center text-[10px] font-bold">
                     {user.full_name.charAt(0).toUpperCase()}
@@ -122,13 +152,22 @@ export const Navbar: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <button
-                onClick={() => openAuthModal('Sign in to save your personal crop scans and history.')}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-agri-950 font-bold text-xs border border-slate-300 shadow-2xs transition"
-              >
-                <LogIn className="w-3.5 h-3.5 text-agri-700" />
-                <span>Farmer Sign In</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={openPricingModal}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs border border-amber-200 transition"
+                >
+                  <Crown className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Plans</span>
+                </button>
+                <button
+                  onClick={() => openAuthModal('Sign in to save your personal crop scans and history.')}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-agri-950 font-bold text-xs border border-slate-300 shadow-2xs transition"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-agri-700" />
+                  <span>Farmer Sign In</span>
+                </button>
+              </div>
             )}
 
             {isAppWorkspace ? (
