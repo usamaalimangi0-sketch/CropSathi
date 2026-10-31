@@ -146,3 +146,46 @@ def test_smart_irrigation_advisor_endpoint():
     assert "watering_advice" in data
     assert "guidelines" in data
     assert len(data["guidelines"]) > 0
+
+@patch("app.services.gemini_service.gemini_service.chat_assistant")
+def test_chat_assistant_endpoint(mock_chat):
+    """Verify conversational farming assistant endpoint."""
+    from app.schemas.chat import ChatResponse
+    mock_chat.return_value = ChatResponse(
+        reply="Assalam-o-Alaikum! Basmati 515 and Super Basmati thrive in Punjab, while IRRI-6 and IRRI-9 are optimal for Sindh.",
+        suggested_followups=["What is the ideal transplanting time for Sindh?", "How much water is required per acre?"],
+        language="en"
+    )
+
+    payload = {
+        "message": "Which rice variety is suitable for Sindh?",
+        "history": [],
+        "crop_context": "Rice",
+        "language": "en"
+    }
+    response = client.post("/api/chat", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert "Assalam-o-Alaikum" in data["reply"]
+    assert len(data["suggested_followups"]) == 2
+
+def test_pakistan_districts_weather_resolution():
+    """Verify location resolution for major Pakistani agricultural districts."""
+    from app.services.weather_service import weather_service
+    lat, lon, name = weather_service.resolve_location("Sukkur, Sindh")
+    assert round(lat, 2) == 27.71
+    assert round(lon, 2) == 68.86
+    assert "Sukkur" in name
+
+    lat2, lon2, name2 = weather_service.resolve_location("Multan, Punjab")
+    assert round(lat2, 2) == 30.16
+    assert "Multan" in name2
+
+def test_urdu_text_sanitizer():
+    """Verify Hindi Devanagari characters and asterisks are stripped."""
+    from app.services.gemini_service import sanitize_text
+    mixed = "یہ مقامی **کھیت** ہے اور उपाय موجود ہیں।"
+    clean = sanitize_text(mixed)
+    assert "उपाय" not in clean
+    assert "*" not in clean
+    assert "تدابیر" in clean or "مقامی" in clean

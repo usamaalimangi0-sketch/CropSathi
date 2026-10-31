@@ -21,7 +21,7 @@ PAKISTAN_AGRI_HUBS = {
 class WeatherService:
     BASE_URL = "https://api.open-meteo.com/v1/forecast"
 
-    def resolve_location(self, location_name: str, lat: Optional[float], lon: Optional[float]) -> Tuple[float, float, str]:
+    def resolve_location(self, location_name: str, lat: Optional[float] = None, lon: Optional[float] = None) -> Tuple[float, float, str]:
         if lat is not None and lon is not None:
             return lat, lon, location_name
 
@@ -30,7 +30,7 @@ class WeatherService:
             info = PAKISTAN_AGRI_HUBS[key]
             return info["lat"], info["lon"], info["name"]
         
-        # Default fallback to Hyderabad, Sindh (DITE Hackathon location)
+        # Default fallback to Hyderabad, Sindh
         return 25.3960, 68.3578, location_name or "Hyderabad, Sindh"
 
     async def fetch_current_weather(self, lat: float, lon: float) -> Optional[Dict[str, Any]]:
